@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="card">
+        <div class="searchbar">
+            <input type="text" placeholder="Enter city name">
+            <button onclick="getWether()">submit</button>
+            
+        </div>
+
+<div id="weathernweak">        
+        <div class="weather">
+            <img src="../images/sun.png" class="weather-icon">
+            <h1 class="temp">27°C </h1>
+            <h2 class="city">Hyderabad</h2>
+        </div>
+            <div class="Weakname">
+                   <h2 class="hafta">Saturday</h2>
+                   <h2 class="time">9:31AM</h2>
+         </div>
+        </div>
+            <div class="details">
+                <marquee behavior="" direction="linear">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="col">
+                             <img src="../images/humidity-sensor.png">
+                                <div>
+                                    <p class="humidity">40%</p>
+                                    <p>Humidity</p>
+                                </div>
+                        </div>
+                        <div class="col">
+                                <img src="../images/wind.png">
+                                <div>
+                                    <p class="wind">6 km/h</p>
+                                    <p>wind speed</p>
+                                </div>
+                        </div>
+                    </div>
+                    
+                <!-- </div> -->
+                
+                </marquee>
+            </div>
+     </div>
+
+    
+
+    <div id="result"></div>
+    <!-- <div id="icon"></div> -->
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+    <script>
+        // let key="https://openweathermap.org/img/wn/01n@2x.png" 
+        // setInterval(function () {
+                
+        // }, 1000);
+
+
+
+
+
+
+         function getWether() {
+            let city = document.querySelector(".searchbar input").value
+            let API_key = "7a359af3d29fc8868e8fc206f6947575"
+            let weathericon = document.querySelector(".weather-icon")
+
+            axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_key}&units=metric`)
+
+        
+            
+            
+            .then(function (response) {
+                    // handle success
+                    console.log(response);
+                    document.querySelector(".city").innerHTML =  response.data.name;
+                    document.querySelector(".temp").innerHTML = Math.round(response.data.main.temp)+"°C"
+                    document.querySelector(".humidity").innerHTML = response.data.main.humidity+"%";
+                    document.querySelector(".wind").innerHTML = Math.round(response.data.wind.speed)+"km/h";
+                    document.querySelector(".hafta").innerHTML =moment().format('ddd') + ":" + moment().subtract(10, 'days').calendar();
+                    document.querySelector(".time").innerHTML = moment().format('LTS'); 
+                    // document.querySelector(".weather-icon").innerHTML = `https://openweathermap.org/img/wn/${response.data.weather[0].main}@2x.png`;
+            //  console.log(response.data.weather[0].main,weathericon.src,"checkkkk")
+
+                 if(response.data.weather[0].main == "Haze"){
+                weathericon.src = "http://127.0.0.1:5500/images/5134336.png"
+                }else if(response.data.weather[0].main == "rain"){
+                weathericon.src = "http://127.0.0.1:5500/images/cloudy(1).png"
+               }else if(response.data.weather[0].main == "Clouds"){
+                weathericon.src = "http://127.0.0.1:5500/images/clouds.png"
+             }else if(response.data.weather[0].main == "Sunny"){
+                weathericon.src = "http://127.0.0.1:5500/images/sun.png"
+            }else if(response.data.weather[0].main == "Clear"){
+                weathericon.src = "http://127.0.0.1:5500/images/clears.png"
+
+                }
+         })
+            
+            
+            
+                
+                
+            
+                
+                
+                
+                .catch(function (error) {
+                    // handle error
+                    document.querySelector("#result").innerHTML = `Not Found`
+                    console.log(error.message);
+                })
+        }
+    </script>
+</body>
+</html>
